@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page - Download & Tracking DHL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .landing-container {
+            max-width: 1100px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        /* Kolom kiri (download) */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .card, .tracking-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover, .tracking-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2, .tracking-card h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p, .tracking-card p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* Bagian Download */
+        .download-section .password-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        #passwordInput {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        #passwordInput:focus {
+            border-color: #007bff;
+        }
+
+        #verifyBtn {
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #verifyBtn:hover {
+            background: #0056b3;
+        }
+
+        #verifyBtn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .error-msg {
+            color: #dc3545;
+            font-size: 14px;
+            min-height: 20px;
+            margin-top: 5px;
+        }
+
+        .download-link-container {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+            width: 100%;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+            transform: scale(1.02);
+        }
+
+        .download-btn.secondary {
+            background: #17a2b8;
+            box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
+        }
+
+        .download-btn.secondary:hover {
+            background: #138496;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Bagian Tracking DHL */
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #awbDHL {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        #awbDHL:focus {
+            border-color: #ffcc00;
+        }
+
+        #trackDHL {
+            padding: 12px 24px;
+            background: #ffcc00;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        #trackDHL:hover {
+            background: #e6b800;
+        }
+
+        .track-result {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border-left: 4px solid #ffcc00;
+            margin-top: 15px;
+        }
+
+        .track-result p {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .track-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .dhl-link {
+            background: #d40511;
+        }
+
+        .dhl-link:hover {
+            background: #a0040e;
+        }
+
+        /* Responsif */
+        @media (max-width: 768px) {
+            .landing-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card, .tracking-card {
+                padding: 20px;
+            }
+            .password-group, .input-group {
+                flex-direction: column;
+            }
+            #verifyBtn, #trackDHL {
+                width: 100%;
+            }
+        }
+
+        /* Animasi */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .icon {
+            font-size: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="landing-container">
+        <!-- Kolom Kiri: Download Files -->
+        <div class="left-column">
+            <div class="card download-section">
+                <h2>
+                    <span class="icon">📁</span> Download Files
+                </h2>
+                <p>File dilindungi password. Masukkan kata sandi untuk mengunduh.</p>
+                
+                <div class="password-group">
+                    <input type="password" id="passwordInput" placeholder="Masukkan password" autofocus>
+                    <button id="verifyBtn">Verifikasi</button>
+                </div>
+                
+                <div id="errorMsg" class="error-msg"></div>
+                
+                <div id="downloadSection" class="download-link-container hidden fade-in">
+                    <!-- Tombol untuk file pertama -->
+                    <button id="downloadBtn1" class="download-btn">
+                        ⬇️ Download scan-offerletter-wet-signature-DimasKurniawan.pdf
+                    </button>
+                    <!-- Tombol untuk file kedua (the courier confirmation slip) -->
+                    <button id="downloadBtn2" class="download-btn secondary">
+                        ⬇️ Download the-courier-confirmation-slip.pdf
+                    </button>
+                    <p style="margin-top: 12px; font-size: 12px; color: #888;">
+                        Klik tombol di atas untuk mengunduh file langsung
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kolom Kanan: Tracking DHL (JNE dihapus) -->
+        <div class="tracking-card">
+            <h2>
+                <span class="icon">📦</span> DHL Express Tracking
+            </h2>
+            <p>Masukkan nomor resi (AWB) DHL untuk melacak status pengiriman.</p>
+            
+            <div class="input-group">
+                <input type="text" id="awbDHL" placeholder="Contoh: 1234567890">
+                <button id="trackDHL">Lacak</button>
+            </div>
+
+            <div id="resultDHL" class="track-result hidden fade-in">
+                <p>🔍 Nomor resi DHL: <strong id="displayDHL"></strong></p>
+                <a href="#" id="linkDHL" class="track-link dhl-link" target="_blank">
+                    <span>🚚 Lacak di DHL Express</span>
+                </a>
+                <p style="margin-top: 12px; font-size: 12px; color: #888;">Anda akan dialihkan ke situs resmi DHL</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ========== BAGIAN DOWNLOAD ==========
+            const passwordInput = document.getElementById('passwordInput');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            const downloadSection = document.getElementById('downloadSection');
+            const downloadBtn1 = document.getElementById('downloadBtn1');
+            const downloadBtn2 = document.getElementById('downloadBtn2');
+
+            const CORRECT_PASSWORD = 'google'; // Password yang benar
+
+            // URL dan nama file pertama (Google Drive)
+            const FILE_URL1 = 'https://drive.google.com/uc?export=download&confirm=t&id=1aVGngdLTU8uw_WQx64w0Xy0BL9pc2L-_';
+            const FILE_NAME1 = 'scan-offerletter-wet-signature-DimasKurniawan.pdf';
+
+            // URL dan nama file kedua (GANTI DENGAN ID GOOGLE DRIVE YANG SESUAI)
+            const FILE_URL2 = 'https://drive.google.com/uc?export=download&confirm=t&id=1aVGngdLTU8uw_WQx64w0Xy0BL9pc2L-_'; // SEMENTARA, GUNAKAN ID YANG BENAR
+            const FILE_NAME2 = 'the-courier-confirmation-slip.pdf';
+
+            function clearError() {
+                errorMsg.textContent = '';
+            }
+
+            function showError(message) {
+                errorMsg.textContent = message;
+            }
+
+            function handleVerify() {
+                const enteredPassword = passwordInput.value;
+
+                if (enteredPassword === CORRECT_PASSWORD) {
+                    clearError();
+                    passwordInput.disabled = true;
+                    verifyBtn.disabled = true;
+                    downloadSection.classList.remove('hidden');
+                    downloadBtn1.focus();
+                } else {
+                    showError('❌ Password salah. Coba lagi.');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                    downloadSection.classList.add('hidden');
+                    passwordInput.disabled = false;
+                    verifyBtn.disabled = false;
+                }
+            }
+
+            verifyBtn.addEventListener('click', handleVerify);
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleVerify();
+                }
+            });
+
+            downloadSection.classList.add('hidden');
+
+            passwordInput.addEventListener('input', function() {
+                if (!passwordInput.disabled) {
+                    downloadSection.classList.add('hidden');
+                }
+            });
+
+            // Fungsi untuk memicu download menggunakan iframe tersembunyi
+            function triggerDownload(url) {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = url;
+                document.body.appendChild(iframe);
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                }, 10000);
+            }
+
+            downloadBtn1.addEventListener('click', function() {
+                triggerDownload(FILE_URL1);
+            });
+
+            downloadBtn2.addEventListener('click', function() {
+                triggerDownload(FILE_URL2);
+            });
+
+            // ========== BAGIAN TRACKING DHL ==========
+            const awbDHL = document.getElementById('awbDHL');
+            const trackDHL = document.getElementById('trackDHL');
+            const resultDHL = document.getElementById('resultDHL');
+            const displayDHL = document.getElementById('displayDHL');
+            const linkDHL = document.getElementById('linkDHL');
+
+            const DHL_TRACKING_URL = 'https://www.dhl.com/id-en/home/tracking.html?tracking-id=';
+
+            function handleTrackDHL() {
+                let awb = awbDHL.value.trim();
+                if (awb === '') {
+                    alert('Masukkan nomor resi DHL terlebih dahulu.');
+                    return;
+                }
+                displayDHL.textContent = awb;
+                linkDHL.href = DHL_TRACKING_URL + encodeURIComponent(awb);
+                resultDHL.classList.remove('hidden');
+            }
+
+            trackDHL.addEventListener('click', handleTrackDHL);
+            awbDHL.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleTrackDHL();
+                }
+            });
+            resultDHL.classList.add('hidden');
+        })();
+    </script>
+</body>
+</html>
