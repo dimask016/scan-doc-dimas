@@ -296,7 +296,7 @@
             </div>
         </div>
 
-        <!-- Kolom Kanan: Tracking DHL (JNE dihapus) -->
+        <!-- Kolom Kanan: Tracking DHL -->
         <div class="tracking-card">
             <h2>
                 <span class="icon">📦</span> DHL Express Tracking
@@ -330,12 +330,12 @@
 
             const CORRECT_PASSWORD = 'google'; // Password yang benar
 
-            // URL dan nama file pertama (Google Drive)
+            // URL dan nama file pertama (lokal)
             const FILE_URL1 = 'scan-offerletter-wet-signature-DimasKurniawan.pdf';
             const FILE_NAME1 = 'scan-offerletter-wet-signature-DimasKurniawan.pdf';
 
-            // URL dan nama file kedua (GANTI DENGAN ID GOOGLE DRIVE YANG SESUAI)
-            const FILE_URL2 = 'https://drive.google.com/uc?export=download&confirm=t&id=1aVGngdLTU8uw_WQx64w0Xy0BL9pc2L-_'; // SEMENTARA, GUNAKAN ID YANG BENAR
+            // URL dan nama file kedua (lokal)
+            const FILE_URL2 = 'the-courier-confirmation-slip.pdf';
             const FILE_NAME2 = 'the-courier-confirmation-slip.pdf';
 
             function clearError() {
@@ -381,23 +381,29 @@
                 }
             });
 
-            // Fungsi untuk memicu download menggunakan iframe tersembunyi
-            function triggerDownload(url) {
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = url;
-                document.body.appendChild(iframe);
+            // Fungsi untuk memicu download file lokal menggunakan anchor dinamis
+            function triggerDownload(url, filename) {
+                // Buat elemen <a> sementara
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename; // Atribut download memaksa browser untuk mengunduh
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click(); // Klik secara programatis
+                // Hapus elemen setelah klik
                 setTimeout(() => {
-                    document.body.removeChild(iframe);
-                }, 10000);
+                    document.body.removeChild(a);
+                }, 1000);
             }
 
+            // Event listener tombol download pertama
             downloadBtn1.addEventListener('click', function() {
-                triggerDownload(FILE_URL1);
+                triggerDownload(FILE_URL1, FILE_NAME1);
             });
 
+            // Event listener tombol download kedua
             downloadBtn2.addEventListener('click', function() {
-                triggerDownload(FILE_URL2);
+                triggerDownload(FILE_URL2, FILE_NAME2);
             });
 
             // ========== BAGIAN TRACKING DHL ==========
