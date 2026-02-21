@@ -473,7 +473,6 @@
 
                 // Update error message if visible
                 if (elements.errorMsg.textContent !== '' && elements.errorMsg.textContent.includes('❌')) {
-                    // Simple check, bisa disesuaikan
                     elements.errorMsg.textContent = t.errorWrongPassword;
                 }
 
@@ -495,7 +494,14 @@
             const downloadBtn2 = document.getElementById('downloadBtn2');
             const protectedTracking = document.getElementById('protectedTracking');
 
-            const CORRECT_PASSWORD = 'google';
+            // Password "google" disembunyikan dengan XOR (kunci 0x55)
+            const encryptedPwd = [50, 58, 58, 50, 57, 48]; // hasil XOR 0x55 dari "google"
+            const xorKey = 0x55;
+
+            function isPasswordCorrect(input) {
+                const correct = encryptedPwd.map(c => String.fromCharCode(c ^ xorKey)).join('');
+                return input === correct;
+            }
 
             const FILE_URL1 = 'scan-offerletter-wet-signature-DimasKurniawan.pdf';
             const FILE_NAME1 = 'scan-offerletter-wet-signature-DimasKurniawan.pdf';
@@ -511,9 +517,9 @@
             }
 
             function handleVerify() {
-                const enteredPassword = passwordInput.value;
+                const enteredPassword = passwordInput.value.trim(); // trim untuk hapus spasi
 
-                if (enteredPassword === CORRECT_PASSWORD) {
+                if (isPasswordCorrect(enteredPassword)) {
                     clearError();
                     passwordInput.disabled = true;
                     verifyBtn.disabled = true;
