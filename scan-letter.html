@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page - Download & Tracking DHL (Protected)</title>
+    <title>Landing Page - Download & Tracking DHL (Bilingual)</title>
     <style>
         * {
             margin: 0;
@@ -19,6 +19,37 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+        }
+
+        .main-wrapper {
+            width: 100%;
+            max-width: 1150px;
+        }
+
+        .language-switcher {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        .lang-btn {
+            background: white;
+            border: none;
+            padding: 8px 16px;
+            margin-left: 8px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+
+        .lang-btn.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .lang-btn:hover {
+            transform: scale(1.05);
         }
 
         .landing-container {
@@ -225,7 +256,6 @@
             background: #a0040e;
         }
 
-        /* Gaya untuk nomor resi terproteksi */
         .protected-tracking {
             background: #e9ecef;
             border-radius: 12px;
@@ -266,6 +296,9 @@
             #verifyBtn, #trackDHL {
                 width: 100%;
             }
+            .language-switcher {
+                text-align: center;
+            }
         }
 
         .fade-in {
@@ -283,71 +316,176 @@
     </style>
 </head>
 <body>
-    <div class="landing-container">
-        <!-- Kolom Kiri: Download Files -->
-        <div class="left-column">
-            <div class="card download-section">
-                <h2>
-                    <span class="icon">📁</span> Download Files
-                </h2>
-                <p>File dilindungi password. Masukkan kata sandi untuk mengunduh.</p>
-                
-                <div class="password-group">
-                    <input type="password" id="passwordInput" placeholder="Masukkan password" autofocus>
-                    <button id="verifyBtn">Verifikasi</button>
-                </div>
-                
-                <div id="errorMsg" class="error-msg"></div>
-                
-                <div id="downloadSection" class="download-link-container hidden fade-in">
-                    <!-- Tombol untuk file pertama -->
-                    <button id="downloadBtn1" class="download-btn">
-                        ⬇️ Download scan-offerletter-wet-signature-DimasKurniawan.pdf
-                    </button>
-                    <!-- Tombol untuk file kedua -->
-                    <button id="downloadBtn2" class="download-btn secondary">
-                        ⬇️ Download the-courier-confirmation-slip.pdf
-                    </button>
-                    <p style="margin-top: 12px; font-size: 12px; color: #888;">
-                        Klik tombol di atas untuk mengunduh file langsung
-                    </p>
-                </div>
-            </div>
+    <div class="main-wrapper">
+        <!-- Language Switcher -->
+        <div class="language-switcher">
+            <button id="langEn" class="lang-btn active">English</button>
+            <button id="langId" class="lang-btn">Indonesia</button>
         </div>
 
-        <!-- Kolom Kanan: Tracking DHL -->
-        <div class="tracking-card">
-            <h2>
-                <span class="icon">📦</span> DHL Express Tracking
-            </h2>
-            <p>Masukkan nomor resi (AWB) DHL untuk melacak status pengiriman.</p>
-            
-            <div class="input-group">
-                <input type="text" id="awbDHL" placeholder="Contoh: 1234567890">
-                <button id="trackDHL">Lacak</button>
+        <div class="landing-container">
+            <!-- Kolom Kiri: Download Files -->
+            <div class="left-column">
+                <div class="card download-section">
+                    <h2>
+                        <span class="icon">📁</span> <span id="downloadTitle">Download Files</span>
+                    </h2>
+                    <p id="downloadDesc">Files are password protected. Enter password to download.</p>
+                    
+                    <div class="password-group">
+                        <input type="password" id="passwordInput" placeholder="Enter password" autofocus>
+                        <button id="verifyBtn">Verify</button>
+                    </div>
+                    
+                    <div id="errorMsg" class="error-msg"></div>
+                    
+                    <div id="downloadSection" class="download-link-container hidden fade-in">
+                        <button id="downloadBtn1" class="download-btn">
+                            ⬇️ Download scan-offerletter-wet-signature-DimasKurniawan.pdf
+                        </button>
+                        <button id="downloadBtn2" class="download-btn secondary">
+                            ⬇️ Download the-courier-confirmation-slip.pdf
+                        </button>
+                        <p id="downloadHint" style="margin-top: 12px; font-size: 12px; color: #888;">
+                            Click the button above to download files directly.
+                        </p>
+                    </div>
+                </div>
             </div>
 
-            <div id="resultDHL" class="track-result hidden fade-in">
-                <p>🔍 Nomor resi DHL: <strong id="displayDHL"></strong></p>
-                <a href="#" id="linkDHL" class="track-link dhl-link" target="_blank">
-                    <span>🚚 Lacak di DHL Express</span>
-                </a>
-                <p style="margin-top: 12px; font-size: 12px; color: #888;">Anda akan dialihkan ke situs resmi DHL</p>
-            </div>
+            <!-- Kolom Kanan: Tracking DHL -->
+            <div class="tracking-card">
+                <h2>
+                    <span class="icon">📦</span> <span id="trackingTitle">DHL Express Tracking</span>
+                </h2>
+                <p id="trackingDesc">Enter DHL AWB number to track your shipment.</p>
+                
+                <div class="input-group">
+                    <input type="text" id="awbDHL" placeholder="e.g. 1234567890">
+                    <button id="trackDHL">Track</button>
+                </div>
 
-            <!-- Bagian nomor resi terproteksi (muncul setelah password benar) -->
-            <div id="protectedTracking" class="protected-tracking hidden fade-in">
-                <p>🔒 Nomor resi khusus Anda: <strong>4821910796</strong></p>
-                <a href="https://www.dhl.com/id-en/home/tracking.html?tracking-id=4821910796" class="track-link dhl-link" target="_blank">
-                    <span>🚚 Lacak nomor ini</span>
-                </a>
-                <p style="margin-top: 12px; font-size: 12px; color: #888;">Nomor ini hanya muncul setelah verifikasi</p>
+                <div id="resultDHL" class="track-result hidden fade-in">
+                    <p>🔍 <span id="resultLabel">Tracking number</span>: <strong id="displayDHL"></strong></p>
+                    <a href="#" id="linkDHL" class="track-link dhl-link" target="_blank">
+                        <span>🚚 <span id="trackBtnLabel">Track on DHL Express</span></span>
+                    </a>
+                    <p id="resultHint" style="margin-top: 12px; font-size: 12px; color: #888;">You will be redirected to DHL official site.</p>
+                </div>
+
+                <!-- Bagian nomor resi terproteksi -->
+                <div id="protectedTracking" class="protected-tracking hidden fade-in">
+                    <p>🔒 <span id="protectedLabel">Your special tracking number</span>: <strong>4821910796</strong></p>
+                    <a href="https://www.dhl.com/id-en/home/tracking.html?tracking-id=4821910796" class="track-link dhl-link" target="_blank">
+                        <span>🚚 <span id="protectedTrackLabel">Track this number</span></span>
+                    </a>
+                    <p id="protectedHint" style="margin-top: 12px; font-size: 12px; color: #888;">This number appears after verification.</p>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         (function() {
+            // ========== TRANSLATIONS ==========
+            const translations = {
+                en: {
+                    downloadTitle: 'Download Files',
+                    downloadDesc: 'Files are password protected. Enter password to download.',
+                    passwordPlaceholder: 'Enter password',
+                    verifyBtn: 'Verify',
+                    downloadHint: 'Click the button above to download files directly.',
+                    trackingTitle: 'DHL Express Tracking',
+                    trackingDesc: 'Enter DHL AWB number to track your shipment.',
+                    awbPlaceholder: 'e.g. 1234567890',
+                    trackBtn: 'Track',
+                    resultLabel: 'Tracking number',
+                    trackBtnLabel: 'Track on DHL Express',
+                    resultHint: 'You will be redirected to DHL official site.',
+                    protectedLabel: 'Your special tracking number',
+                    protectedTrackLabel: 'Track this number',
+                    protectedHint: 'This number appears after verification.',
+                    errorWrongPassword: '❌ Wrong password. Try again.',
+                    alertEmptyAwb: 'Please enter DHL AWB number first.'
+                },
+                id: {
+                    downloadTitle: 'Download File',
+                    downloadDesc: 'File dilindungi password. Masukkan kata sandi untuk mengunduh.',
+                    passwordPlaceholder: 'Masukkan password',
+                    verifyBtn: 'Verifikasi',
+                    downloadHint: 'Klik tombol di atas untuk mengunduh file langsung.',
+                    trackingTitle: 'DHL Express Tracking',
+                    trackingDesc: 'Masukkan nomor resi (AWB) DHL untuk melacak status pengiriman.',
+                    awbPlaceholder: 'Contoh: 1234567890',
+                    trackBtn: 'Lacak',
+                    resultLabel: 'Nomor resi',
+                    trackBtnLabel: 'Lacak di DHL Express',
+                    resultHint: 'Anda akan dialihkan ke situs resmi DHL.',
+                    protectedLabel: 'Nomor resi khusus Anda',
+                    protectedTrackLabel: 'Lacak nomor ini',
+                    protectedHint: 'Nomor ini hanya muncul setelah verifikasi.',
+                    errorWrongPassword: '❌ Password salah. Coba lagi.',
+                    alertEmptyAwb: 'Masukkan nomor resi DHL terlebih dahulu.'
+                }
+            };
+
+            let currentLang = 'en';
+
+            // Elemen yang perlu diterjemahkan
+            const elements = {
+                downloadTitle: document.getElementById('downloadTitle'),
+                downloadDesc: document.getElementById('downloadDesc'),
+                passwordInput: document.getElementById('passwordInput'),
+                verifyBtn: document.getElementById('verifyBtn'),
+                downloadHint: document.getElementById('downloadHint'),
+                trackingTitle: document.getElementById('trackingTitle'),
+                trackingDesc: document.getElementById('trackingDesc'),
+                awbDHL: document.getElementById('awbDHL'),
+                trackDHL: document.getElementById('trackDHL'),
+                resultLabel: document.getElementById('resultLabel'),
+                trackBtnLabel: document.getElementById('trackBtnLabel'),
+                resultHint: document.getElementById('resultHint'),
+                protectedLabel: document.getElementById('protectedLabel'),
+                protectedTrackLabel: document.getElementById('protectedTrackLabel'),
+                protectedHint: document.getElementById('protectedHint'),
+                errorMsg: document.getElementById('errorMsg')
+            };
+
+            function updateLanguage(lang) {
+                currentLang = lang;
+                const t = translations[lang];
+
+                elements.downloadTitle.textContent = t.downloadTitle;
+                elements.downloadDesc.textContent = t.downloadDesc;
+                elements.passwordInput.placeholder = t.passwordPlaceholder;
+                elements.verifyBtn.textContent = t.verifyBtn;
+                elements.downloadHint.textContent = t.downloadHint;
+                elements.trackingTitle.textContent = t.trackingTitle;
+                elements.trackingDesc.textContent = t.trackingDesc;
+                elements.awbDHL.placeholder = t.awbPlaceholder;
+                elements.trackDHL.textContent = t.trackBtn;
+                elements.resultLabel.textContent = t.resultLabel;
+                elements.trackBtnLabel.textContent = t.trackBtnLabel;
+                elements.resultHint.textContent = t.resultHint;
+                elements.protectedLabel.textContent = t.protectedLabel;
+                elements.protectedTrackLabel.textContent = t.protectedTrackLabel;
+                elements.protectedHint.textContent = t.protectedHint;
+
+                // Update error message if visible
+                if (elements.errorMsg.textContent !== '' && elements.errorMsg.textContent.includes('❌')) {
+                    // Simple check, bisa disesuaikan
+                    elements.errorMsg.textContent = t.errorWrongPassword;
+                }
+
+                // Update active class on language buttons
+                document.getElementById('langEn').classList.toggle('active', lang === 'en');
+                document.getElementById('langId').classList.toggle('active', lang === 'id');
+            }
+
+            // Event listeners untuk tombol bahasa
+            document.getElementById('langEn').addEventListener('click', () => updateLanguage('en'));
+            document.getElementById('langId').addEventListener('click', () => updateLanguage('id'));
+
             // ========== BAGIAN DOWNLOAD ==========
             const passwordInput = document.getElementById('passwordInput');
             const verifyBtn = document.getElementById('verifyBtn');
@@ -357,13 +495,10 @@
             const downloadBtn2 = document.getElementById('downloadBtn2');
             const protectedTracking = document.getElementById('protectedTracking');
 
-            const CORRECT_PASSWORD = 'google'; // Password yang benar
+            const CORRECT_PASSWORD = 'google';
 
-            // URL dan nama file pertama (lokal)
             const FILE_URL1 = 'scan-offerletter-wet-signature-DimasKurniawan.pdf';
             const FILE_NAME1 = 'scan-offerletter-wet-signature-DimasKurniawan.pdf';
-
-            // URL dan nama file kedua (lokal)
             const FILE_URL2 = 'the-courier-confirmation-slip.pdf';
             const FILE_NAME2 = 'the-courier-confirmation-slip.pdf';
 
@@ -383,14 +518,14 @@
                     passwordInput.disabled = true;
                     verifyBtn.disabled = true;
                     downloadSection.classList.remove('hidden');
-                    protectedTracking.classList.remove('hidden'); // Tampilkan nomor resi terproteksi
+                    protectedTracking.classList.remove('hidden');
                     downloadBtn1.focus();
                 } else {
-                    showError('❌ Password salah. Coba lagi.');
+                    showError(translations[currentLang].errorWrongPassword);
                     passwordInput.value = '';
                     passwordInput.focus();
                     downloadSection.classList.add('hidden');
-                    protectedTracking.classList.add('hidden'); // Sembunyikan lagi
+                    protectedTracking.classList.add('hidden');
                     passwordInput.disabled = false;
                     verifyBtn.disabled = false;
                 }
@@ -405,7 +540,7 @@
             });
 
             downloadSection.classList.add('hidden');
-            protectedTracking.classList.add('hidden'); // Pastikan tersembunyi di awal
+            protectedTracking.classList.add('hidden');
 
             passwordInput.addEventListener('input', function() {
                 if (!passwordInput.disabled) {
@@ -414,7 +549,6 @@
                 }
             });
 
-            // Fungsi untuk memicu download file lokal menggunakan anchor dinamis
             function triggerDownload(url, filename) {
                 const a = document.createElement('a');
                 a.href = url;
@@ -435,7 +569,7 @@
                 triggerDownload(FILE_URL2, FILE_NAME2);
             });
 
-            // ========== BAGIAN TRACKING DHL (umum) ==========
+            // ========== BAGIAN TRACKING DHL ==========
             const awbDHL = document.getElementById('awbDHL');
             const trackDHL = document.getElementById('trackDHL');
             const resultDHL = document.getElementById('resultDHL');
@@ -447,7 +581,7 @@
             function handleTrackDHL() {
                 let awb = awbDHL.value.trim();
                 if (awb === '') {
-                    alert('Masukkan nomor resi DHL terlebih dahulu.');
+                    alert(translations[currentLang].alertEmptyAwb);
                     return;
                 }
                 displayDHL.textContent = awb;
@@ -463,6 +597,9 @@
                 }
             });
             resultDHL.classList.add('hidden');
+
+            // Set bahasa awal
+            updateLanguage('en');
         })();
     </script>
 </body>
